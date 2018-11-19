@@ -3,9 +3,11 @@ package jsmith774.katas.pokerhands;
 import static org.junit.jupiter.api.Assumptions.assumingThat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 public class PokerHand {
 	private Card[] cards = new Card[5];
@@ -16,6 +18,7 @@ public class PokerHand {
 		PokerHand hand = new PokerHand();
 		
 		Card card = null;
+		StringTokenizer tokenizer = new StringTokenizer(handString);
 		CardOrdinal ordinal = null;
 		
 		//tokenize String and create/load Cards from each token
@@ -23,7 +26,11 @@ public class PokerHand {
 		
 		Map<CardOrdinal, Integer> cardOrdinalMap = hand.cardOrdinalMap;
 		int i=0;
+		while(tokenizer.hasMoreTokens()) {
 		//for each token }
+			String cardValue = tokenizer.nextToken();
+			card = new Card(cardValue);
+			
 			hand.cards[i] = card;
 			ordinal = card.getOrdinal();
 			 
@@ -34,9 +41,14 @@ public class PokerHand {
 			} else {
 				cardOrdinalMap.put(ordinal, 1);
 			}
-			
+			i++;
+		}
 		// } verify exactly 5 tokens or throw exception
 		return hand;
+	}
+	
+	public Card[] getCards() {
+		return this.cards;
 	}
 	
 	public HandRank getRank() {
@@ -44,11 +56,39 @@ public class PokerHand {
 		Set keySet = map.keySet();
 		int keyCount = keySet.size();
 		if(keyCount == 5) {
-			//checkForFlush
-			//checkForStraight
+			boolean isStraight = false;
+			boolean isFlush = false;
 			
-			//if not flush and not straight
-				return HandRank.HIGH_CARD;
+			//checkForStraight
+			Arrays.sort(cards);
+			if(cards[4].getOrdinal().getValue() - cards[0].getOrdinal().getValue() == 4) {
+				isStraight = true;
+			}
+			
+			//checkForFlush
+			CardSuit lastSuit = cards[0].getSuit();
+			for(int i=1; i < cards.length; i++) //start with index 1 (second card)
+			{			
+				if(cards[i].getSuit().equals(lastSuit)) {
+					isFlush = true;				
+				} else {
+					isFlush = false;
+				}
+				if(!isFlush) {
+					break;
+				}
+			}
+			
+			if(isStraight && isFlush) {
+				return HandRank.STRAIGHT_FLUSH;
+			}
+			if(isStraight) {
+				return HandRank.STRAIGHT;
+			}
+			if(isFlush) {
+				return HandRank.FLUSH;
+			}
+			return HandRank.HIGH_CARD;
 		} else if(keyCount == 4) {
 			return HandRank.ONE_PAIR;
 		} else if(keyCount == 3) {

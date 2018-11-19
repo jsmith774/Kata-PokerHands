@@ -2,6 +2,8 @@ package jsmith774.katas.pokerhands;
 
 public class Player {
 
+	public static final Player PUSH = new Player("PUSH");
+	
 	private String name;
 	private PokerHand hand;
 	
