@@ -5,15 +5,9 @@ public class Card implements Comparable<Card> {
 	private CardOrdinal ordinal;
 	private CardSuit suit;
 
-	public Card(String cardValue) {
-		try {
+	public Card(String cardValue) throws Exception {
 			this.ordinal = evalOrdinal(cardValue.charAt(0));
 			this.suit = evalSuit(cardValue.charAt(1));
-System.out.println("Ordinal = " + this.ordinal + " | Suit = " + this.suit);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			System.err.println(ex.getMessage());
-		}
 	}
 	
 	CardOrdinal getOrdinal() {

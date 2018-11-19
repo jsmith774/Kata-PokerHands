@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assumptions.assumingThat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -14,7 +16,7 @@ public class PokerHand {
 	
 	private Map<CardOrdinal, Integer> cardOrdinalMap = new HashMap<CardOrdinal, Integer>(); //key = cardOrdinal; value=count of that ordinal in hand
 
-	public static PokerHand createFromString(String handString) {
+	public static PokerHand createFromString(String handString) throws Exception {
 		PokerHand hand = new PokerHand();
 		
 		Card card = null;
@@ -106,13 +108,37 @@ public class PokerHand {
 		}
 	}
 	
-	//hand outcome type (pair, 2pair, set, etc.)
+	public List<CardOrdinal> getPairs() {
+		List<CardOrdinal> pairs = new ArrayList<CardOrdinal>();
+		
+		Set<Map.Entry<CardOrdinal, Integer>> entries = cardOrdinalMap.entrySet();
+		for (Map.Entry<CardOrdinal, Integer> entry : entries) {
+		    if(entry.getValue() == 2) {
+		    	pairs.add(entry.getKey());
+		    }
+		}
+		return pairs;
+	}
 	
-	//hand high card (varies with type)
-	//   ex: high card = cards in descending value order (5 values)
-	//         pair = pair value, remaining cars in order (4 values)
-	//         2 pair = highest pair, second highest pair, odd card (3 values)
-	//         set = set, remaining cards in order (3 value)
-	//		   etc.
-
+	public CardOrdinal getSet() {
+		Set<Map.Entry<CardOrdinal, Integer>> entries = cardOrdinalMap.entrySet();
+		for (Map.Entry<CardOrdinal, Integer> entry: entries) {
+			if(entry.getValue() == 3) {
+				return entry.getKey();
+			}
+		}
+		//no set
+		return null;
+	}
+	
+	public CardOrdinal getQuads() {
+		Set<Map.Entry<CardOrdinal, Integer>> entries = cardOrdinalMap.entrySet();
+		for (Map.Entry<CardOrdinal, Integer> entry: entries) {
+			if(entry.getValue() == 4) {
+				return entry.getKey();
+			}
+		}
+		//no quads
+		return null;
+	}
 }
