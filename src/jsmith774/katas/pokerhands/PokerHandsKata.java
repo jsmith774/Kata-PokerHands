@@ -3,11 +3,41 @@ package jsmith774.katas.pokerhands;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 public class PokerHandsKata {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
+		Scanner reader = new Scanner(System.in);
+		Player player1;
+		Player player2;
+		
+		try {
+		
+			System.out.println("Please enter player1 name:");				
+			String p1Name = reader.nextLine();
+			player1 = new Player(p1Name);
+		
+			System.out.println("Please enter 5 cards for Player1 [Ex: 3D AH 9H TS 8C] (Ranks: 2,3,4,5,6,7,8,9,T,J,Q,K; Suits: H,S,C,D");
+			String p1Hand = reader.nextLine();
+			player1.setHand(PokerHand.createFromString(p1Hand));
+		
+			System.out.println("Please enter player 2 name:");
+			String p2Name = reader.nextLine();
+			player2 = new Player(p2Name);
+		
+			System.out.println("Please enter 5 cards for Player2 [Ex: 3D AH 9H TS 8C] (Ranks: 2,3,4,5,6,7,8,9,T,J,Q,K; Suits: H,S,C,D");
+			String p2Hand = reader.nextLine();
+			player2.setHand(PokerHand.createFromString(p2Hand));
+			
+			System.out.println("WINNER = " + PokerHandsKata.showdown(player1,  player2).getName());
+		
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			System.out.println(ex.getMessage());
+			System.exit(-1);
+		}
 
 	}
 	

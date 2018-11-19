@@ -30,6 +30,9 @@ public class PokerHand {
 		int i=0;
 		while(tokenizer.hasMoreTokens()) {
 		//for each token }
+			if(i == 5) { 
+				throw new Exception("Too many cards provided in string input.");
+			}
 			String cardValue = tokenizer.nextToken();
 			card = new Card(cardValue);
 			
@@ -45,7 +48,11 @@ public class PokerHand {
 			}
 			i++;
 		}
-		// } verify exactly 5 tokens or throw exception
+		if(i != 5) {
+			throw new Exception("Improper number of cards in string input.");
+		}
+		
+		
 		return hand;
 	}
 	
