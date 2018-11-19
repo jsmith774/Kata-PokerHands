@@ -3,6 +3,7 @@ package jsmith774.katas.pokerhands;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -38,7 +39,7 @@ class PokerHandsTest {
 	private static final Player PLAYER1 = new Player("Black");
 	private static final Player PLAYER2 = new Player("White");
 	
-	private static final ArrayList<String[]> testData = new ArrayList<String[]>();	
+	private static final List<String[]> testData = new ArrayList<String[]>();	
 	
 	
 	
@@ -70,10 +71,13 @@ class PokerHandsTest {
 		int i=1;
 		for(String[] dataRow: testData) {
 			System.out.println("Hand #" + i++);
-			//set player1 hand
-			//set player2 hand
-			//p1 vs p2 showdown
-			//test showdown result
+			
+			PLAYER1.setHand(PokerHand.createFromString(dataRow[0]));
+			PLAYER2.setHand(PokerHand.createFromString(dataRow[1]));
+			
+			Player winningPlayer = PokerHandsKata.showdown(PLAYER1, PLAYER2);
+			
+			assertEquals(dataRow[2], winningPlayer.getName());
 		}
 		fail("Not yet implemented");
 	}
