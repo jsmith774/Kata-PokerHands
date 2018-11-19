@@ -24,22 +24,11 @@ public class PokerHandsKata {
 			return p2;
 		} else {
 			//evaluate tied handRank for handValue
-			Card[] p1Cards = p1.getHand().getCards();
-			Card[] p2Cards = p2.getHand().getCards();
+			//Card[] p1Cards = p1.getHand().getCards();
+			//Card[] p2Cards = p2.getHand().getCards();
 			switch(p1Rank) {
-			case HIGH_CARD:
-				Arrays.sort(p1Cards, Collections.reverseOrder());				
-				Arrays.sort(p2Cards, Collections.reverseOrder());
-				for(int i=0; i<p1Cards.length; i++) {
-					int compareOrdinal = p1Cards[i].getOrdinal().compareTo(p2Cards[i].getOrdinal());
-					if(compareOrdinal > 0) {
-						return p1;
-					} else if(compareOrdinal < 0) {
-						return p2;
-					} //else equal, continue processing next card
-				}
-				//all cards tied
-				return Player.PUSH;
+			case HIGH_CARD: case STRAIGHT: case FLUSH: case STRAIGHT_FLUSH:
+				return checkForHighCard(p1, p2);
 			case ONE_PAIR:
 System.out.println("Compare ONE_PAIR hands");				
 				break;
@@ -47,27 +36,9 @@ System.out.println("Compare ONE_PAIR hands");
 System.out.println("Compare TWO_PAIR hands");				
 				break;
 			//case SET: //PUSH NOT POSSIBLE
-			case STRAIGHT:
-				Arrays.sort(p1Cards, Collections.reverseOrder());				
-				Arrays.sort(p2Cards, Collections.reverseOrder());
-				for(int i=0; i<p1Cards.length; i++) {
-					int compareOrdinal = p1Cards[i].getOrdinal().compareTo(p2Cards[i].getOrdinal());
-					if(compareOrdinal > 0) {
-						return p1;
-					} else if(compareOrdinal < 0) {
-						return p2;
-					} //else equal, continue processing next card
-				}
-				//all cards tied
-				return Player.PUSH;			
-			case FLUSH:
-System.out.println("Compare FLUSH hands");				
-				break;
 			//case FULL_HOUSE: //PUSH NOT POSSIBLE
 			//case QUADS: //PUSH NOT POSSIBLE
-			case STRAIGHT_FLUSH:
-System.out.println("Compare STRAIGHT_FLUSH hands");				
-				break;
+			
 			default:
 System.out.println("No RANK case match");				
 				//exception
@@ -77,5 +48,22 @@ System.out.println("No RANK case match");
 		}
 	
 	}
-	
+	private static Player checkForHighCard(Player p1, Player p2) {
+		Card[] p1Cards = p1.getHand().getCards();
+		Card[] p2Cards = p2.getHand().getCards();
+		
+		Arrays.sort(p1Cards, Collections.reverseOrder());				
+		Arrays.sort(p2Cards, Collections.reverseOrder());
+		
+		for(int i=0; i<p1Cards.length; i++) {
+			int compareOrdinal = p1Cards[i].getOrdinal().compareTo(p2Cards[i].getOrdinal());
+			if(compareOrdinal > 0) {
+				return p1;
+			} else if(compareOrdinal < 0) {
+				return p2;
+			} //else equal, continue processing next card
+		}
+		//all cards tied
+		return Player.PUSH;
+	}
 }
